@@ -32,25 +32,39 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+
     private static final String TAG = "MainActivity";
     @Bind(R.id.allUsersList)
     ListView mAllUsersList;
     @Bind(R.id.swipeRefreshLayout)
     SwipeRefreshLayout mSwipeRefreshLayout;
-
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     SharedPreferences preferences;
     private ArrayList<User> allUsers =  new ArrayList<>();
     private AllUserAdapter adapter;
+    private Realm realm;
+    RealmResults<User> users;
+
+
+    private RealmChangeListener callback = new RealmChangeListener() {
+        @Override
+        public void onChange(Object element) {
+            Log.e(TAG, "onChange: "+element.toString());
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setSupportActionBar(toolbar);
         preferences = new SharedPreferenceHelper(this).getInstance();
         BusProvider.getInstance().register(this);
+        realm = Realm.getDefaultInstance();
 
 
         if (!Utils.isLoggedIn(this)) {
@@ -69,9 +84,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
 
         if (!Utils.isTokenSet(this) && Utils.isLoggedIn(this)) {
-
             if (checkPlayServices()) {
-                // Start IntentService to register this application with GCM.
                 Intent intent = new Intent(this, RegistrationIntentService.class);
                 startService(intent);
             }
@@ -87,10 +100,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         };
 
-
-
-
-
         mAllUsersList.setOnItemClickListener(this);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -101,15 +110,13 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             }
         });
-
-        adapter = new AllUserAdapter(allUsers, this);
-        mAllUsersList.setAdapter(adapter);
-        getData();
     }
+
+
+
 
     private void getData() {
         final Retrofit retrofit = new RetroFit(this).getInstance();
-
         // prepare call in Retrofit 2.0
         UserApi api = retrofit.create(UserApi.class);
 
@@ -119,9 +126,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             @Override
             public void onResponse(Call<ArrayList<User>> call, Response<ArrayList<User>> response) {
                 if (response.isSuccessful()) {
-                    allUsers.clear();
-                    allUsers.addAll(response.body());
-                    adapter.notifyDataSetChanged();
+
+                    realm.beginTransaction();
+                    List<User> realmRepos = realm.copyToRealmOrUpdate(response.body());
+                    realm.commitTransaction();
+
                     if(mSwipeRefreshLayout != null && mSwipeRefreshLayout.isRefreshing()){
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
@@ -139,6 +148,23 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onResume() {
         super.onResume();
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver, new IntentFilter(Constants.REGISTRATION_COMPLETE));
+
+        if(adapter == null){
+            List<User> users = loadUsers();
+            adapter = new AllUserAdapter(this);
+            adapter.setData(users);
+            mAllUsersList.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        }
+
+        users.addChangeListener(callback);
+
+    }
+
+    private List<User> loadUsers() {
+        getData();
+        users = realm.where(User.class).findAll();
+        return new ArrayList<User>(users);
     }
 
     @Override
@@ -182,6 +208,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        startActivity(new Intent(this, ChatDetail.class).putExtra("chatToId", allUsers.get(position).getId()));
+        startActivity(new Intent(this, ChatDetail.class).putExtra("chatToId", users.get(position).getId()));
     }
 }

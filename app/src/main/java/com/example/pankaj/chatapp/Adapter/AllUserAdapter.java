@@ -12,7 +12,7 @@ import com.example.pankaj.chatapp.Helpers.Utils;
 import com.example.pankaj.chatapp.Models.User;
 import com.example.pankaj.chatapp.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -22,12 +22,16 @@ import butterknife.ButterKnife;
  */
 public class AllUserAdapter extends BaseAdapter {
 
-    private ArrayList<User> allUsers;
+    private List<User> allUsers;
     private Context mContext;
 
-    public AllUserAdapter(ArrayList<User> allUsers, Context mContext) {
+    public AllUserAdapter(Context mContext) {
         this.allUsers = allUsers;
         this.mContext = mContext;
+    }
+
+    public void setData(List<User> details) {
+        this.allUsers = details;
     }
 
     @Override

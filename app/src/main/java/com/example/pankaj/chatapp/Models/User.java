@@ -2,36 +2,23 @@ package com.example.pankaj.chatapp.Models;
 
 import java.io.Serializable;
 
-/**
- * Created by pankaj on 19/01/16.
- */
-public class User implements Serializable{
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
+public class User extends RealmObject implements Serializable{
+
+    @PrimaryKey
     private Integer id;
 
     private String email;
     private String name;
     private String password;
     private String phone;
-    private Boolean isSelected;
-
-    public Boolean getSelected() {
-        return isSelected;
-    }
-
-    public void setSelected(Boolean selected) {
-        isSelected = selected;
-    }
-
-    private Boolean isFriend;
 
     public void setId(Integer id) {
         this.id = id;
     }
 
-    public Boolean getIsFriend() {
-        return isFriend;
-    }
 
     public Integer getId() {
         return id;
