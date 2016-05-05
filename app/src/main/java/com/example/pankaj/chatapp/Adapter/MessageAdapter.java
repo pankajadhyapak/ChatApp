@@ -1,6 +1,7 @@
 package com.example.pankaj.chatapp.Adapter;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -8,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,9 +26,7 @@ import java.util.Date;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-/**
- * Created by pankaj on 01/05/16.
- */
+
 public class MessageAdapter extends BaseAdapter {
 
     private static final String TAG = "MessageAdapter";
@@ -39,6 +37,7 @@ public class MessageAdapter extends BaseAdapter {
         this.allMessages = allMessages;
         this.mContext = context;
     }
+
 
     @Override
     public int getCount() {
@@ -58,6 +57,7 @@ public class MessageAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
+        Log.d(TAG, "getView: "+ getItemViewType(position));
         final ViewHolder holder;
 
         if (convertView == null) {
@@ -102,24 +102,24 @@ public class MessageAdapter extends BaseAdapter {
         Boolean isItMe = msg.getSentById() == Utils.currentUser(mContext).getId();
 
         if (isItMe) {
-            holder.date.setText("Me at "+dateStr);
+            holder.date.setText("Me on "+dateStr);
             holder.messageRootContainer.setGravity(Gravity.RIGHT);
-            holder.messageContainer.setBackground(mContext.getDrawable(R.drawable.msg_bubble_incoming_a));
+            holder.messageContainer.setBackgroundResource(R.drawable.msg_bubble_incoming_a);
             if (msg.getMedia_path() != null && !msg.getMedia_path().isEmpty()) {
                 holder.imageView.setPadding(0, 0, 30, 0);
             } else {
                 holder.msg.setPadding(0, 0, 30, 0);
-                holder.msg.setTextColor(mContext.getResources().getColor(R.color.white));
+                holder.msg.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             }
         } else {
-            holder.date.setText("Doc Name at "+dateStr);
+            holder.date.setText("Doc Name on "+dateStr);
             holder.messageRootContainer.setGravity(Gravity.LEFT);
-            holder.messageContainer.setBackground(mContext.getDrawable(R.drawable.msg_bubble_input));
+            holder.messageContainer.setBackgroundResource(R.drawable.msg_bubble_input);
             if (msg.getMedia_path() != null && !msg.getMedia_path().isEmpty()) {
                 holder.imageView.setPadding(0, 0, 0, 0);
             } else {
                 holder.msg.setPadding(0, 0, 30, 0);
-                holder.msg.setTextColor(mContext.getResources().getColor(R.color.black));
+                holder.msg.setTextColor(ContextCompat.getColor(mContext, R.color.black));
             }
         }
 
@@ -137,7 +137,7 @@ public class MessageAdapter extends BaseAdapter {
         ImageView imageView;
 
         @Bind(R.id.messageContainer)
-        LinearLayout messageContainer;
+        RelativeLayout messageContainer;
 
         @Bind(R.id.messageRootContainer)
         RelativeLayout messageRootContainer;

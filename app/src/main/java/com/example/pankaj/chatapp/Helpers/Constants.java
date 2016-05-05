@@ -5,7 +5,7 @@ package com.example.pankaj.chatapp.Helpers;
  */
 public class Constants {
 
-    public static final String BASE_URL = "http://chat.sociodoc.com/";
+    public static final String BASE_URL = "http://192.168.2.4:8000/";
 
     public static final String API_BASE_URL = BASE_URL+"api/";
 

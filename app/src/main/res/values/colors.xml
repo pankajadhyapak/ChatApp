@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#2B57CC</color>
+    <color name="colorPrimaryDark">#3240B4</color>
+    <color name="colorAccent">#5F66EF</color>
+    <color name="colorPrimaryLight">#C5CAE9</color>
+    <color name="colorpPrimaryText">#212121</color>
+    <color name="colorSecondaryText">#727272</color>
+    <color name="divider">#B6B6B6</color>
+
+
     <color name="color_chat_me">#dcf8c6</color>
     <color name="color_chat_other">#ffffff</color>
     <color name="white">#ffffff</color>

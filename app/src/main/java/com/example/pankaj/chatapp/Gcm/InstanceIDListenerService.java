@@ -2,9 +2,7 @@ package com.example.pankaj.chatapp.Gcm;
 
 import android.content.Intent;
 
-/**
- * Created by pankaj on 19/01/16.
- */
+
 public class InstanceIDListenerService extends com.google.android.gms.iid.InstanceIDListenerService {
 
     private static final String TAG = "MyInstanceIDLS";

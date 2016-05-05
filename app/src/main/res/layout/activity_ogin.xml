@@ -14,11 +14,13 @@
         android:paddingLeft="32dp"
         android:paddingRight="32dp"
         android:paddingTop="@dimen/activity_vertical_margin">
+
         <LinearLayout
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:layout_width="0px"
-            android:layout_height="0px"/>
+            android:layout_height="0px"
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
+
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
@@ -28,7 +30,7 @@
             android:layout_marginTop="29dp"
             android:text="@string/app_name"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#ffffff"
+            android:textColor="#333"
             android:textSize="34sp"
             android:textStyle="bold" />
 
@@ -39,37 +41,49 @@
             android:layout_below="@id/textView"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
-            android:padding="32dp">
+            android:padding="20dp">
 
-
-            <EditText
-                android:id="@+id/loginEmail"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/emailContainer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:ems="10"
-                android:hint="Email Id"
-                android:inputType="textEmailAddress"
-                android:padding="12dp" />
+                android:layout_height="match_parent">
 
-            <EditText
-                android:id="@+id/loginPassword"
+                <EditText
+                    android:id="@+id/loginEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:ems="10"
+                    android:hint="Email Id"
+                    android:inputType="textEmailAddress"
+                    android:padding="12dp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/loginEmail"
-                android:ems="10"
-                android:hint="Password"
-                android:inputType="textPassword"
-                android:padding="12dp" />
+                android:layout_height="match_parent"
+                android:layout_below="@+id/emailContainer"
+
+                android:id="@+id/passwordContainer">
+
+                <EditText
+                    android:id="@+id/loginPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:ems="10"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:padding="12dp" />
+            </android.support.design.widget.TextInputLayout>
 
             <Button
                 android:id="@+id/loginBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/loginPassword"
+                android:layout_below="@+id/passwordContainer"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="12dp"
                 android:background="@color/colorAccent"
@@ -83,7 +97,7 @@
                 android:layout_below="@+id/loginBtn"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="26dp"
-                android:text="Dont Have Account ? Signup"/>
+                android:text="Dont Have Account ? Signup" />
 
         </RelativeLayout>
 

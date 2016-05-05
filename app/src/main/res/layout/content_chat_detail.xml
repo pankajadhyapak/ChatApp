@@ -41,7 +41,7 @@
 
             />
 
-        <ListView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/messagesContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -51,8 +51,6 @@
             android:padding="8dp"
             android:layout_above="@+id/messageEdit"
             android:paddingTop="10dp"
-            android:listSelector="@android:color/transparent"
-            android:transcriptMode="alwaysScroll"
-            android:divider="@null" />
+            />
     </RelativeLayout>
 </LinearLayout>

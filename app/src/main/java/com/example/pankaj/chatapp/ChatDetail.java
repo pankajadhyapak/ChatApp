@@ -7,6 +7,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -14,10 +16,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.pankaj.chatapp.Adapter.MessageAdapter;
+import com.example.pankaj.chatapp.Adapter.MessageRvAdapter;
 import com.example.pankaj.chatapp.Api.ChatApi;
 import com.example.pankaj.chatapp.Helpers.BusProvider;
 import com.example.pankaj.chatapp.Helpers.Constants;
@@ -53,17 +54,12 @@ public class ChatDetail extends AppCompatActivity {
     @Bind(R.id.chatSendButton)
     ImageButton mChatSendButton;
     @Bind(R.id.messagesContainer)
-    ListView mMessagesContainer;
-
-
-
+    RecyclerView mMessagesContainer;
    // private MessageRvAdapter mAdapter;
-    private MessageAdapter mAdapter;
+    private MessageRvAdapter mAdapter;
     private ArrayList<Message> allMessages =  new ArrayList<>();
     SharedPreferences preferences;
     String imgDecodableString;
-
-
     private int chatToId = 0;
 
 
@@ -80,19 +76,13 @@ public class ChatDetail extends AppCompatActivity {
         BusProvider.getInstance().register(this);
         chatToId = getIntent().getIntExtra("chatToId", 0);
 
-        mAdapter =  new MessageAdapter(allMessages, this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setStackFromEnd(true);
+        mMessagesContainer.setLayoutManager(layoutManager);
+
+        mAdapter =  new MessageRvAdapter(this, allMessages);
         mMessagesContainer.setAdapter(mAdapter);
 
-    }
-
-    private void scrollMyListViewToBottom() {
-        mMessagesContainer.post(new Runnable() {
-            @Override
-            public void run() {
-                // Select the last row so it will scroll into view...
-                mMessagesContainer.setSelection(mAdapter.getCount() - 1);
-            }
-        });
     }
 
     @Subscribe
@@ -167,7 +157,8 @@ public class ChatDetail extends AppCompatActivity {
                     allMessages.clear();
                     allMessages.addAll(response.body());
                     mAdapter.notifyDataSetChanged();
-                    scrollMyListViewToBottom();
+//                    scrollMyListViewToBottom();
+
                     Toast.makeText(ChatDetail.this, "" + allMessages.size(), Toast.LENGTH_SHORT).show();
 
                 } else {
